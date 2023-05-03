@@ -9,27 +9,67 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # install.packages("readr")
 # install.packages("rgdal")
+# install.packages("dplyr")
 
 library(readr)
 library(rgdal)
+library(dplyr)
 ```
 
 ## Gather Raster Data from CSV
 ```{r}
 # Import data
-NDVI_Jan_Apr_2020 <- read_csv("results/NDVI Jan-Apr 2020.csv")
-NDVI_May_Aug_2020 <- read_csv("results/NDVI May_Aug 2020.csv")
-NDVI_Sep_Dec_2020 <- read_csv("results/NDVI Sep_Dec 2020.csv")
-NDVI_Jan_Apr_2022 <- read_csv("results/NDVI Jan-Apr 2022.csv")
-NDVI_May_Aug_2022 <- read_csv("results/NDVI May_Aug 2022.csv")
-NDVI_Sep_Dec_2022 <- read_csv("results/NDVI Sep_Dec 2022.csv")
+NDVI_Jan_Apr_2020 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Jan-Apr 2020.csv")
+NDVI_May_Aug_2020 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI May-Aug 2020.csv")
+NDVI_Sep_Dec_2020 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Sep-Dec 2020.csv")
+NDVI_Jan_Apr_2022 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Jan-Apr 2022.csv")
+NDVI_May_Aug_2022 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI May-Aug 2022.csv")
+NDVI_Sep_Dec_2022 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Sep-Dec 2022.csv")
+```
+# Pull NDVI means as vectors from CSV
+```{r}
+NDVI_mean_Jan_Apr_2020 <- pull(NDVI_Jan_Apr_2020, name = NDVI_mean)
+NDVI_mean_Jan_Apr_2022 <- pull(NDVI_Jan_Apr_2022, name = NDVI_mean)
+NDVI_mean_May_Aug_2020 <- pull(NDVI_May_Aug_2020, name = NDVI_mean)
+NDVI_mean_May_Aug_2022 <- pull(NDVI_May_Aug_2022, name = NDVI_mean)
+NDVI_mean_Sep_Dec_2020 <- pull(NDVI_Sep_Dec_2020, name = NDVI_mean)
+NDVI_mean_Sep_Dec_2022 <- pull(NDVI_Sep_Dec_2022, name = NDVI_mean)
 
+```
+
+# Perform Paired t-test
+```{r}
 # Perform paired t-test
-t.test(zone_mean_Jan_Apr, mu = 0, paired = TRUE)
-t.test(zone_mean_May_Aug, mu = 0, paired = TRUE)
-t.test(zone_mean_Sep_Dec, mu = 0, paired = TRUE)
+t_test_Jan_Apr <- t.test(NDVI_mean_Jan_Apr_2020, NDVI_mean_Jan_Apr_2022, paired=TRUE)
+t_test_May_Aug <- t.test(NDVI_mean_May_Aug_2020, NDVI_mean_May_Aug_2022, paired=TRUE)
+t_test_Sep_Dec <- t.test(NDVI_mean_Sep_Dec_2020, NDVI_mean_Sep_Dec_2022, paired=TRUE)
 
-# Interpret results
+# Print the result
+print(t_test_Jan_Apr)
+print(t_test_May_Aug)
+print(t_test_Sep_Dec)
+```
+
+
+# Display Results - Box Plot
+```{r}
+
+# Create a box plot
+boxplot(NDVI_mean_Jan_Apr_2020, NDVI_mean_Jan_Apr_2022, names = c("NDVI Jan-Apr per collection 2020", "NDVI Jan-Apr per collection 2022"), col = c("blue", "orange"))
+
+legend("topright", legend = c("NDVI Jan-Apr 2020", "NDVI Jan-Apr 2022"), fill = c("blue", "orange"))
+
+
+boxplot(NDVI_mean_May_Aug_2020, NDVI_mean_May_Aug_2022, names = c("NDVI May-Aug per collection 2020", "NDVI May-Aug per collection 2022"), col = c("blue", "orange"))
+
+legend("topright", legend = c("NDVI May-Aug 2020", "NDVI May-Aug 2022"), fill = c("blue", "orange"))
+
+
+
+boxplot(NDVI_mean_Sep_Dec_2020, NDVI_mean_Sep_Dec_2022, names = c("NDVI Sep-Dec per collection 2020", "NDVI Sep-Dec per collection 2022"), col = c("blue", "orange"))
+
+legend("topright", legend = c("NDVI Sep-Dec 2020", "NDVI Sep-Dec 2022"), fill = c("blue", "orange"))
+
 ```
 
 
