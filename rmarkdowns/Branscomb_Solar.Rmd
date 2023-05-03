@@ -1,0 +1,35 @@
+---
+title: "Branscomb Solar"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+# install.packages("readr")
+# install.packages("rgdal")
+
+library(readr)
+library(rgdal)
+```
+
+## Gather Raster Data from CSV
+```{r}
+# Import data
+NDVI_Jan_Apr_2020 <- read_csv("results/NDVI Jan-Apr 2020.csv")
+NDVI_May_Aug_2020 <- read_csv("results/NDVI May_Aug 2020.csv")
+NDVI_Sep_Dec_2020 <- read_csv("results/NDVI Sep_Dec 2020.csv")
+NDVI_Jan_Apr_2022 <- read_csv("results/NDVI Jan-Apr 2022.csv")
+NDVI_May_Aug_2022 <- read_csv("results/NDVI May_Aug 2022.csv")
+NDVI_Sep_Dec_2022 <- read_csv("results/NDVI Sep_Dec 2022.csv")
+
+# Perform paired t-test
+t.test(zone_mean_Jan_Apr, mu = 0, paired = TRUE)
+t.test(zone_mean_May_Aug, mu = 0, paired = TRUE)
+t.test(zone_mean_Sep_Dec, mu = 0, paired = TRUE)
+
+# Interpret results
+```
+
+
