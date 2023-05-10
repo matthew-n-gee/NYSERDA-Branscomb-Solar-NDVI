@@ -16,18 +16,28 @@ library(rgdal)
 library(dplyr)
 ```
 
-## Gather Raster Data from CSV
+## Gather NDVI values of Branscomb Solar edge (10-40 meter buffer) from CSV
 ```{r}
-# Import data
+# Import Branscomb edge data
 NDVI_Jan_Apr_2020 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Jan-Apr 2020.csv")
 NDVI_May_Aug_2020 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI May-Aug 2020.csv")
 NDVI_Sep_Dec_2020 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Sep-Dec 2020.csv")
 NDVI_Jan_Apr_2022 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Jan-Apr 2022.csv")
 NDVI_May_Aug_2022 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI May-Aug 2022.csv")
 NDVI_Sep_Dec_2022 <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Sep-Dec 2022.csv")
+
+
+# Import control (8 random grassfields) data
+NDVI_Jan_Apr_2020_control <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Jan-Apr 2020 Control.csv")
+NDVI_May_Aug_2020_control <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI May-Aug 2020 Control.csv")
+NDVI_Sep_Dec_2020_control <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Sep-Dec 2020 Control.csv")
+NDVI_Jan_Apr_2022_control <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Jan-Apr 2022 Control.csv")
+NDVI_May_Aug_2022_control <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI May-Aug 2022 Control.csv")
+NDVI_Sep_Dec_2022_control <- read_csv("~/GitHub/NYSERDA-Branscomb-Solar-NDVI/results/NDVI Sep-Dec 2022 Control.csv")
 ```
 # Pull NDVI means as vectors from CSV
 ```{r}
+# Branscomb edge data
 NDVI_mean_Jan_Apr_2020 <- pull(NDVI_Jan_Apr_2020, name = NDVI_mean)
 NDVI_mean_Jan_Apr_2022 <- pull(NDVI_Jan_Apr_2022, name = NDVI_mean)
 NDVI_mean_May_Aug_2020 <- pull(NDVI_May_Aug_2020, name = NDVI_mean)
@@ -35,6 +45,13 @@ NDVI_mean_May_Aug_2022 <- pull(NDVI_May_Aug_2022, name = NDVI_mean)
 NDVI_mean_Sep_Dec_2020 <- pull(NDVI_Sep_Dec_2020, name = NDVI_mean)
 NDVI_mean_Sep_Dec_2022 <- pull(NDVI_Sep_Dec_2022, name = NDVI_mean)
 
+# Control (8 random grassland) data
+NDVI_mean_Jan_Apr_2020_control <- pull(NDVI_Jan_Apr_2020_control, name = NDVI_mean)
+NDVI_mean_Jan_Apr_2022_control <- pull(NDVI_Jan_Apr_2022_control, name = NDVI_mean)
+NDVI_mean_May_Aug_2020_control <- pull(NDVI_May_Aug_2020_control, name = NDVI_mean)
+NDVI_mean_May_Aug_2022_control <- pull(NDVI_May_Aug_2022_control, name = NDVI_mean)
+NDVI_mean_Sep_Dec_2020_control <- pull(NDVI_Sep_Dec_2020_control, name = NDVI_mean)
+NDVI_mean_Sep_Dec_2022_control <- pull(NDVI_Sep_Dec_2022_control, name = NDVI_mean)
 ```
 
 # Perform Paired t-test
@@ -44,17 +61,25 @@ t_test_Jan_Apr <- t.test(NDVI_mean_Jan_Apr_2020, NDVI_mean_Jan_Apr_2022, paired=
 t_test_May_Aug <- t.test(NDVI_mean_May_Aug_2020, NDVI_mean_May_Aug_2022, paired=TRUE)
 t_test_Sep_Dec <- t.test(NDVI_mean_Sep_Dec_2020, NDVI_mean_Sep_Dec_2022, paired=TRUE)
 
+t_test_Jan_Apr_control <- t.test(NDVI_mean_Jan_Apr_2020_control, NDVI_mean_Jan_Apr_2022_control, paired=TRUE)
+t_test_May_Aug_control <- t.test(NDVI_mean_May_Aug_2020_control, NDVI_mean_May_Aug_2022_control, paired=TRUE)
+t_test_Sep_Dec_control <- t.test(NDVI_mean_Sep_Dec_2020_control, NDVI_mean_Sep_Dec_2022_control, paired=TRUE)
+
 # Print the result
 print(t_test_Jan_Apr)
 print(t_test_May_Aug)
 print(t_test_Sep_Dec)
+
+print(t_test_Jan_Apr_control)
+print(t_test_May_Aug_control)
+print(t_test_Sep_Dec_control)
 ```
 
 
 # Display Results - Box Plot
 ```{r}
 
-# Create a box plot
+# Create a box plot - Branscomb edge
 boxplot(NDVI_mean_Jan_Apr_2020, NDVI_mean_Jan_Apr_2022, names = c("NDVI Jan-Apr per collection 2020", "NDVI Jan-Apr per collection 2022"), col = c("blue", "orange"))
 
 legend("topright", legend = c("NDVI Jan-Apr 2020", "NDVI Jan-Apr 2022"), fill = c("blue", "orange"))
@@ -70,6 +95,25 @@ boxplot(NDVI_mean_Sep_Dec_2020, NDVI_mean_Sep_Dec_2022, names = c("NDVI Sep-Dec 
 
 legend("topright", legend = c("NDVI Sep-Dec 2020", "NDVI Sep-Dec 2022"), fill = c("blue", "orange"))
 
+
+
+
+
+# Create a box plot - Control (8 random grassfields)
+boxplot(NDVI_mean_Jan_Apr_2020_control, NDVI_mean_Jan_Apr_2022_control, names = c("NDVI Jan-Apr grass control 2020", "NDVI Jan-Apr grass control 2022"), col = c("blue", "orange"))
+
+legend("topright", legend = c("NDVI Jan-Apr 2020", "NDVI Jan-Apr 2022"), fill = c("blue", "orange"))
+
+
+boxplot(NDVI_mean_May_Aug_2020_control, NDVI_mean_May_Aug_2022_control, names = c("NDVI May-Aug grass control 2020", "NDVI May-Aug grass control 2022"), col = c("blue", "orange"))
+
+legend("topright", legend = c("NDVI May-Aug 2020", "NDVI May-Aug 2022"), fill = c("blue", "orange"))
+
+
+
+boxplot(NDVI_mean_Sep_Dec_2020_control, NDVI_mean_Sep_Dec_2022_control, names = c("NDVI Sep-Dec grass control 2020", "NDVI Sep-Dec grass control 2022"), col = c("blue", "orange"))
+
+legend("topright", legend = c("NDVI Sep-Dec 2020", "NDVI Sep-Dec 2022"), fill = c("blue", "orange"))
 ```
 
 
