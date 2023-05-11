@@ -1,5 +1,5 @@
 # NYSERDA-Branscomb-Solar-NDVI
-NDVI Paired t-test on NYSERDA Branscomb Solar
+NDVI Paired t-test on Branscomb Solar (Operational - Tier 1, Nameplate Capacity = 20MWac)
 
 ---
 
