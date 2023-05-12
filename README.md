@@ -11,6 +11,7 @@ Visualizes paired t-test on the Normalized Difference Vegetation Index (NDVI) of
 #### Subdirectory Info:
 1. raw-data
     + NYSERDA Branscomb Solar shapefile
+    + Control Variable: 8 randomly selected nearby grass field shapefile
     + Sentinel-2 NDVI raster tif during 4 month periods (cloud masked in Google Earth Engine)
 2. processed-data
     + Branscomb Solar edge buffers (10-40 meters away from solar collections) shapefiles processed in QGIS
